@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Grades;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class SubjectController extends Controller
+class GradesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +15,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-      if(auth()->user()->role === 'admin') {
-        return response(Subject::with('instructor')->get());
-      } else if(auth()->user()->role === 'instructor') {
-        return response(Subject::with('students.user')->with('instructor')->where('instructor_id', auth()->user()->id)->get());
-      } else if(auth()->user()->role === 'student') {
-        $v = Subject::with('instructor')->with('students.user')->whereHas('students', function($query) {
-          $query->where('user_id', auth()->user()->id);
-        })->get();
-        return response($v);
-      } 
+      $user_grades = Grades::with('student')->where('user', auth()->user()->id)->get();
+      response([$user_grades], 201);
     }
 
     /**
@@ -35,7 +26,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -46,18 +37,21 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-      $fields = $request->validate([
-        'name' => 'required|string',
-        'schedule' => 'required',
-        'instructor_id' => 'required'
-      ]);
+        $fields = $request->validate([
+          'user_id' => 'required',
+          'subject_id' => 'required',
+          'year' => 'required',
+          'school_year' => 'required',
+        ]);
 
-      $sub = Subject::create([
-        'name' => $fields['name'],
-        'code' => $request->input('code'),
-        'schedule' => $fields['schedule'],
-        'instructor_id' => $fields['instructor_id'],
-      ]);
+        $grade = Grades::create([
+          'user_id' => $fields['user_id'],
+          'subject_id' => $fields['subject_id'],
+          'year' => $fields['year'],
+          'school_year' => $fields['school_year'],
+        ]);
+
+        response($grade, 201);
     }
 
     /**
@@ -68,8 +62,8 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-      $user_grades = Subject::with('students.user')->where('id', $id)->get();
-      return response($user_grades, 201);
+      $user_grades = Grades::with('student')->find($id);
+      response([$user_grades], 201);
     }
 
     /**

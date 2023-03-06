@@ -11,7 +11,6 @@ export const ForgotPassword = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     await apiRequest.post('/forgot-password', user).then((res) => {
-      alert('Successfully Forgot Password');
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       if (res.data.user.role === 'admin') {

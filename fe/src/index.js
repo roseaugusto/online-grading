@@ -7,7 +7,10 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminInstructors } from './pages/AdminInstructors';
 import { AdminStudents } from './pages/AdminStudents';
 import { AdminSubjects } from './pages/AdminSubjects';
+import { AdminGrades } from './pages/AdminGrades';
 import { InstructorSubjects } from './pages/InstructorSubjects';
+import { InstructorSubjectEnrollees } from './pages/InstructorSubjectEnrollees';
+import { StudentSubjects } from './pages/StudentSubjects';
 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -25,8 +28,13 @@ root.render(
         <Route path='/admin/intructors' element={<AdminInstructors />} />
         <Route path='/admin/students' element={<AdminStudents />} />
         <Route path='/admin/subjects' element={<AdminSubjects />} />
+        <Route path='/admin/grades' element={<AdminGrades />} />
 
         <Route path='/instructor/subjects' element={<InstructorSubjects />} />
+
+        <Route path='/subjects/:id' element={<InstructorSubjectEnrollees />} />
+
+        <Route path='/student/subjects' element={<StudentSubjects />} />
       </Routes>
     </Router>
   </React.StrictMode>,

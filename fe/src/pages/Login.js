@@ -15,13 +15,14 @@ export const Login = () => {
         password: user.password,
       })
       .then((res) => {
-        alert('Successfully Login');
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
         if (res.data.user.role === 'admin') {
           window.location.href = '/admin/dashboard';
-        } else {
+        } else if (res.data.user.role === 'instructor') {
           window.location.href = '/instructor/subjects';
+        } else {
+          window.location.href = '/student/subjects';
         }
       });
   };

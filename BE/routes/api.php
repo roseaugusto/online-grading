@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\GradesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,6 @@ Route::post('forgot-password/', [UserController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function() {
   Route::post('logout/', [UserController::class, 'logout']);
   Route::get('users/{role}', [UserController::class, 'showUsersbyRole']);
-  Route::resource('subjects/', SubjectController::class);
+  Route::resource('subjects', SubjectController::class);
+  Route::resource('grades', GradesController::class);
 });

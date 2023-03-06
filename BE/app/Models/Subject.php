@@ -13,5 +13,14 @@ class Subject extends Model
       'name',
       'code',
       'schedule',
+      'instructor_id',
   ];
+
+  public function instructor() {
+    return $this->belongsTo(User::class, 'instructor_id');
+  }
+
+  public function students() {
+    return $this->hasMany(Grades::class, 'subject_id');
+  }
 }

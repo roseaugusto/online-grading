@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { apiRequest } from '../utils/apiRequest';
 
-export const InstructorSubjects = () => {
+export const StudentSubjects = () => {
   const [subjects, setSubjects] = useState([]);
 
   const fetchData = async () => {
@@ -42,9 +42,7 @@ export const InstructorSubjects = () => {
                 <td>{subject.instructor.name}</td>
                 <td>{subject.schedule}</td>
                 <td>
-                  <a href={`/subjects/${subject.id}`}>
-                    <button className='btn btn-primary'>See Enrolless</button>
-                  </a>
+                  <button className='btn btn-primary'>See Grades</button>
                 </td>
               </tr>
             ))

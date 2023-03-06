@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Container, Form } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
 
 export const AdminSubjects = () => {
@@ -11,24 +11,43 @@ export const AdminSubjects = () => {
     name: '',
     code: '',
     schedule: '',
+    instructor_id: null,
   });
   const [showModal, setShowModal] = useState(false);
+  const [instructors, setInstructors] = useState([]);
 
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+  const handleClose = () => {
+    setShowModal(false);
+  };
+  const handleShow = (id) => {
+    setShowModal(true);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await apiRequest.post('/subjects', subject).then((res) => {
-      alert('Successfully Registered');
-      handleClose();
-      fetchData();
-    });
+    await apiRequest
+      .post('/subjects', subject)
+      .then((res) => {
+        handleClose();
+        fetchData();
+      })
+      .then(() => alert('Error'));
   };
 
   const fetchData = async () => {
     await apiRequest.get('/subjects').then((res) => {
       setSubjects(res.data || []);
+    });
+
+    await apiRequest.get('/users/instructor').then((res) => {
+      let data = [];
+      if (res.data.length > 0) {
+        data = res.data.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      }
+      setInstructors(data);
     });
   };
 
@@ -50,8 +69,9 @@ export const AdminSubjects = () => {
           <tr>
             <th scope='col'>ID</th>
             <th scope='col'>Name</th>
-            <th scope='col'>Code</th>
+            <th scope='col'>Instructor</th>
             <th scope='col'>Schedule</th>
+            <th scope='col'>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -64,8 +84,13 @@ export const AdminSubjects = () => {
               <tr key={index}>
                 <th scope='row'>{subject.id}</th>
                 <td>{subject.name}</td>
-                <td>{subject.code}</td>
+                <td>{subject.instructor.name}</td>
                 <td>{subject.schedule}</td>
+                <td>
+                  <a href={`/subjects/${subject.id}`}>
+                    <button className='btn btn-primary'>See Enrolless</button>
+                  </a>
+                </td>
               </tr>
             ))
           )}
@@ -73,7 +98,7 @@ export const AdminSubjects = () => {
       </table>
       <Modal show={showModal} onHide={handleClose}>
         <form onSubmit={onSubmit}>
-          <Modal.Header>
+          <Modal.Header className='bg-primary text-white'>
             <Modal.Title>Subject Registration</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -86,14 +111,6 @@ export const AdminSubjects = () => {
               />
             </div>
             <div className='mb-3'>
-              <h6>Code</h6>
-              <input
-                type='text'
-                className='form-control'
-                onChange={(e) => setSubject({ ...subject, code: e.target.value })}
-              />
-            </div>
-            <div className='mb-3'>
               <h6>Schedule</h6>
               <input
                 type='text'
@@ -101,6 +118,21 @@ export const AdminSubjects = () => {
                 placeholder='MWF (9:00AM - 10:00AM)'
                 onChange={(e) => setSubject({ ...subject, schedule: e.target.value })}
               />
+            </div>
+            <div className='mb-3'>
+              <h6>Instructors Name</h6>
+              <select
+                className='form-control'
+                name='instructors'
+                onChange={(e) => setSubject({ ...subject, instructor_id: e.target.value })}
+              >
+                <option value={null}>Choose Instructor</option>
+                {instructors.map((item, index) => (
+                  <option key={index} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </Modal.Body>
           <Modal.Footer>

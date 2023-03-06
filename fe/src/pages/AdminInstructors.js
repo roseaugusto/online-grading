@@ -34,7 +34,6 @@ export const AdminInstructors = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     await apiRequest.post('/register', user).then((res) => {
-      alert('Successfully Registered');
       handleClose();
       fetchData();
     });
@@ -91,7 +90,7 @@ export const AdminInstructors = () => {
       </table>
       <Modal show={showModal} onHide={handleClose}>
         <form onSubmit={onSubmit}>
-          <Modal.Header>
+          <Modal.Header className='bg-primary text-white'>
             <Modal.Title>Instructor Registration</Modal.Title>
           </Modal.Header>
           <Modal.Body>

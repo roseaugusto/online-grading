@@ -65,6 +65,14 @@ export const Sidebar = ({ role = 'admin' }) => {
                   Subjects
                 </a>
               </li>
+              {/* <li className={loc.pathname === '/admin/grades' ? 'rounded bg-primary' : 'bg-white'}>
+                <a
+                  href='/admin/grades'
+                  className={`nav-link ${loc.pathname === '/admin/grades' && 'text-white'}`}
+                >
+                  Grades
+                </a>
+              </li> */}
             </>
           )}
 
@@ -77,6 +85,19 @@ export const Sidebar = ({ role = 'admin' }) => {
               <a
                 href='/instructor/subjects'
                 className={`nav-link ${loc.pathname === '/instructor/subjects' && 'text-white'}`}
+              >
+                Subjects
+              </a>
+            </li>
+          )}
+
+          {role === 'student' && (
+            <li
+              className={loc.pathname === '/student/subjects' ? 'rounded bg-primary' : 'bg-white'}
+            >
+              <a
+                href='/instructor/subjects'
+                className={`nav-link ${loc.pathname === '/student/subjects' && 'text-white'}`}
               >
                 Subjects
               </a>
