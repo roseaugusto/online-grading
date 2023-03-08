@@ -9,7 +9,7 @@ export const AdminSubjects = () => {
   const [subjects, setSubjects] = useState([]);
   const [subject, setSubject] = useState({
     name: '',
-    code: '',
+    code: '-',
     schedule: '',
     instructor_id: null,
   });
@@ -31,7 +31,6 @@ export const AdminSubjects = () => {
         handleClose();
         fetchData();
       })
-      .then(() => alert('Error'));
   };
 
   const fetchData = async () => {
