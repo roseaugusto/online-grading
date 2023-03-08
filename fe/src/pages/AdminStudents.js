@@ -49,7 +49,7 @@ export const AdminStudents = () => {
   const onEnrollmentSubmit = async (e) => {
     e.preventDefault();
     await apiRequest.post('/grades', enrollment).then((res) => {
-      handleClose();
+      handleCloseSubject();
       fetchData();
     });
   };
