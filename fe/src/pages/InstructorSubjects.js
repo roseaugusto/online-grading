@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { apiRequest } from '../utils/apiRequest';
+import { Breadcrumb } from 'react-bootstrap';
 
 export const InstructorSubjects = () => {
   const [subjects, setSubjects] = useState([]);
@@ -18,7 +17,11 @@ export const InstructorSubjects = () => {
   }, []);
 
   return (
-    <Page>
+    <Page title='Subjects'>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Subjects</Breadcrumb.Item>
+      </Breadcrumb>
       <table className='table table-striped'>
         <thead>
           <tr>
@@ -43,7 +46,7 @@ export const InstructorSubjects = () => {
                 <td>{subject.schedule}</td>
                 <td>
                   <a href={`/subjects/${subject.id}`}>
-                    <button className='btn btn-primary'>See Enrolless</button>
+                    <button className='btn btn-primary'>See Enrollees</button>
                   </a>
                 </td>
               </tr>

@@ -1,25 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { apiRequest } from '../utils/apiRequest';
+import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import Select from 'react-select';
+import { Breadcrumb } from 'react-bootstrap';
 
 export const InstructorSubjectEnrollees = () => {
   const { id } = useParams();
-
+  const [showModal, setShowModal] = useState(false);
   const [students, setStudents] = useState([]);
+  const [sub, setSub] = useState({});
+  const [user, setUser] = useState({});
+  const [grade, setGrade] = useState({
+    id: null,
+    type: 'midterm',
+    grade: null,
+  });
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = (id) => {
+    setGrade({ ...grade, id: id });
+    setShowModal(true);
+  };
 
   const fetchData = async () => {
     await apiRequest.get(`/subjects/${id}`).then((res) => {
+      setSub(res.data[0] || {});
       setStudents(res.data[0].students || []);
     });
   };
 
+  const fetchAdminData = async () => {
+    if (!localStorage.getItem('token')) {
+      window.location.href = '/login';
+    } else {
+      setUser(JSON.parse(localStorage.getItem('user') || {}));
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await apiRequest.patch(`/grades/${grade.id}`, grade).then((res) => {
+      handleClose();
+      fetchData();
+    });
+  };
+
+  const options = [
+    { value: 'midterm', label: 'midterm' },
+    { value: 'final', label: 'final' },
+  ];
+  const [selectedOption, setSelectedOption] = useState(null);
+  const handleChange = (option) => {
+    setSelectedOption(option);
+    setGrade({ ...grade, type: option.value });
+  };
+
   useEffect(() => {
     fetchData();
+    fetchAdminData();
   }, []);
 
+  const gradeFormat = (grade) => {
+    if (grade) {
+      if (grade <= 0) {
+        return 'DROPPED';
+      } else {
+        return parseFloat(grade).toFixed(1);
+      }
+    }
+    return '-';
+  };
+
   return (
-    <Page>
+    <Page title={`${sub.name} Enrollees`} subTitle={`Schedule: ${sub.schedule}`}>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item
+          href={`${user.role === 'instructor' ? '/instructor/subjects' : '/admin/subjects'}`}
+        >
+          Subjects
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>Enrollees</Breadcrumb.Item>
+      </Breadcrumb>
       <table className='table table-striped'>
         <thead>
           <tr>
@@ -27,7 +91,7 @@ export const InstructorSubjectEnrollees = () => {
             <th scope='col'>Student</th>
             <th scope='col'>Midterms</th>
             <th scope='col'>Finals</th>
-            <th scope='col'>Actions</th>
+            {user.role === 'instructor' ? <th scope='col'>Actions</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -40,16 +104,58 @@ export const InstructorSubjectEnrollees = () => {
               <tr key={index}>
                 <th scope='row'>{key.user.id}</th>
                 <td>{key.user.name}</td>
-                <td>{key?.midterm || `-`}</td>
-                <td>{key?.finals || `-`}</td>
-                <td>
-                  <button className='btn btn-primary'>Grade Student</button>
-                </td>
+                <td>{gradeFormat(key.midterm)}</td>
+                <td>{gradeFormat(key.finals)}</td>
+                {user.role === 'instructor' ? (
+                  <td>
+                    <button className='btn btn-primary' onClick={() => handleShow(key.id)}>
+                      Grade Student
+                    </button>
+                  </td>
+                ) : null}
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      <Modal show={showModal} onHide={handleClose}>
+        <form onSubmit={onSubmit}>
+          <Modal.Header className='bg-primary text-white'>
+            <Modal.Title>Student Grading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className='mb-3'>
+              <h6>Grade</h6>
+
+              <small className='text-danger'>
+                * Please refer to the criteria below.
+                <br /> Highest = 1.0 | Passing = 3.0 | Dropped = 0
+              </small>
+
+              <input
+                type='text'
+                className='form-control'
+                pattern='^([1-9]\d*|0)(\.\d+)?$'
+                required
+                onChange={(e) => setGrade({ ...grade, grade: e.target.value })}
+              />
+            </div>
+            <div className='mb-3'>
+              <h6>Term</h6>
+              <Select value={selectedOption} onChange={handleChange} options={options} required />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant='primary' type='submit'>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     </Page>
   );
 };

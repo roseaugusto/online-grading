@@ -24,7 +24,8 @@ export const Login = () => {
         } else {
           window.location.href = '/student/subjects';
         }
-      });
+      })
+      .catch((e) => alert('Invalid credentials'));
   };
 
   return (
@@ -56,9 +57,13 @@ export const Login = () => {
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
               />
             </div>
-            <button type='submit' className='btn btn-primary'>
-              Login
-            </button>
+            <div className='text-center'>
+              <button type='submit' className='btn btn-primary '>
+                Login
+              </button>
+              <br />
+              <a href='/forgot-password'>Forgot Password?</a>
+            </div>
           </form>
         </div>
       </div>

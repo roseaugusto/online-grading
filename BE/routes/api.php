@@ -18,11 +18,12 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('register/', [UserController::class, 'register']);  
 Route::post('login/', [UserController::class, 'login']);
-Route::post('forgot-password/', [UserController::class, 'login']);
+Route::post('forgot-password/', [UserController::class, 'forgotPassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
   Route::post('logout/', [UserController::class, 'logout']);
   Route::get('users/{role}', [UserController::class, 'showUsersbyRole']);
   Route::resource('subjects', SubjectController::class);
   Route::resource('grades', GradesController::class);
+  Route::get('user-tor/{id}', [GradesController::class, 'showTor']);
 });

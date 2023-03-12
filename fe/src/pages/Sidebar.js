@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { apiRequest } from '../utils/apiRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 
-export const Sidebar = ({ role = 'admin' }) => {
+export const Sidebar = ({ user = {} }) => {
   const loc = useLocation();
   const logout = async () => {
     await apiRequest.post('logout', {}).then(() => {
@@ -20,10 +20,15 @@ export const Sidebar = ({ role = 'admin' }) => {
         style={{ width: '320px' }}
       >
         <div className='border-bottom border-2 py-4 text-center mb-2 bg-primary text-white'>
-          <h5>Online Grading | {role.toUpperCase()}</h5>
+          <h5>Online Grading | {user.role?.toUpperCase()}</h5>
+          <h6>
+            {' '}
+            <FontAwesomeIcon icon={faUser} className='mr-2' />
+            {user.name}
+          </h6>
         </div>
         <ul className='nav nav-pills flex-column mb-auto px-3'>
-          {role === 'admin' && (
+          {user?.role === 'admin' && (
             <>
               <li
                 className={loc.pathname === '/admin/dashboard' ? 'rounded bg-primary' : 'bg-white'}
@@ -76,7 +81,7 @@ export const Sidebar = ({ role = 'admin' }) => {
             </>
           )}
 
-          {role === 'instructor' && (
+          {user?.role === 'instructor' && (
             <li
               className={
                 loc.pathname === '/instructor/subjects' ? 'rounded bg-primary' : 'bg-white'
@@ -91,17 +96,29 @@ export const Sidebar = ({ role = 'admin' }) => {
             </li>
           )}
 
-          {role === 'student' && (
-            <li
-              className={loc.pathname === '/student/subjects' ? 'rounded bg-primary' : 'bg-white'}
-            >
-              <a
-                href='/instructor/subjects'
-                className={`nav-link ${loc.pathname === '/student/subjects' && 'text-white'}`}
+          {user?.role === 'student' && (
+            <>
+              <li
+                className={loc.pathname === '/student/subjects' ? 'rounded bg-primary' : 'bg-white'}
               >
-                Subjects
-              </a>
-            </li>
+                <a
+                  href='/student/subjects'
+                  className={`nav-link ${loc.pathname === '/student/subjects' && 'text-white'}`}
+                >
+                  Subjects
+                </a>
+              </li>
+              <li
+                className={loc.pathname === '/student/grades' ? 'rounded bg-primary' : 'bg-white'}
+              >
+                <a
+                  href='/student/grades'
+                  className={`nav-link ${loc.pathname === '/student/grades' && 'text-white'}`}
+                >
+                  Grades
+                </a>
+              </li>
+            </>
           )}
         </ul>
         <div

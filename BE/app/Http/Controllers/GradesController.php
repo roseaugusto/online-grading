@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grades;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,10 +15,30 @@ class GradesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      $user_grades = Grades::with('student')->where('user', auth()->user()->id)->get();
-      response([$user_grades], 201);
+      $yearQuery = request()->query('year', '');
+      $keyword = request()->query('keyword');
+      $user_grades = Grades::with('subject.instructor')->where('user_id', auth()->user()->id);
+      if($yearQuery!== 'null') {
+        $user_grades = $user_grades->where('year', $yearQuery);
+      }
+
+      if($keyword !== 'null') {
+        $user_grades = $user_grades->wherehas('subject', function($query) use ($keyword) {
+          $query->where('name', 'like', '%'.$keyword.'%');
+        })->orWhereHas('subject.instructor', function($query) use ($keyword) {
+          $query->where('name', 'like', '%'.$keyword.'%')->where('user_id', auth()->user()->id);
+        });
+        
+      }
+      return response($user_grades->get());
+    }
+
+    public function showTor($id)
+    {
+      $user_grades = Grades::with('subject')->with('user')->where('user_id', $id)->get()->groupBy('year');
+      return response($user_grades);
     }
 
     /**
@@ -86,7 +108,14 @@ class GradesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $fields = $request->validate([
+        'grade' => 'required',
+        'type' => 'required',
+      ]);
+
+      $grade = Grades::find($id);
+      $fields['type'] === 'midterm' ? ($grade->midterm = $fields['grade']) : ($grade->finals = $fields['grade']);
+      $grade->save();
     }
 
     /**

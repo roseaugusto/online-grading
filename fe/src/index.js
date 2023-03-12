@@ -11,6 +11,8 @@ import { AdminGrades } from './pages/AdminGrades';
 import { InstructorSubjects } from './pages/InstructorSubjects';
 import { InstructorSubjectEnrollees } from './pages/InstructorSubjectEnrollees';
 import { StudentSubjects } from './pages/StudentSubjects';
+import { StudentGrades } from './pages/StudentGrades';
+import { DownloadGrade } from './pages/DownloadGrade';
 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -29,12 +31,14 @@ root.render(
         <Route path='/admin/students' element={<AdminStudents />} />
         <Route path='/admin/subjects' element={<AdminSubjects />} />
         <Route path='/admin/grades' element={<AdminGrades />} />
+        <Route path='/admin/tor/:id' element={<DownloadGrade />} />
 
         <Route path='/instructor/subjects' element={<InstructorSubjects />} />
 
         <Route path='/subjects/:id' element={<InstructorSubjectEnrollees />} />
 
         <Route path='/student/subjects' element={<StudentSubjects />} />
+        <Route path='/student/grades' element={<StudentGrades />} />
       </Routes>
     </Router>
   </React.StrictMode>,

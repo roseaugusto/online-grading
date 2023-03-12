@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, Modal } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
+import { Breadcrumb } from 'react-bootstrap';
 
 export const AdminInstructors = () => {
   const [instructors, setInstructors] = useState([]);
@@ -40,7 +41,11 @@ export const AdminInstructors = () => {
   };
 
   return (
-    <Page>
+    <Page title='Instructors'>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Instructors</Breadcrumb.Item>
+      </Breadcrumb>
       <FontAwesomeIcon
         icon={faPlus}
         className='mr-2 btn btn-primary float-right mb-3'
@@ -72,16 +77,30 @@ export const AdminInstructors = () => {
                 <td>{instructor.name}</td>
                 <td>{instructor.email}</td>
                 <td>
-                  <a href={instructor.fb}>{instructor.fb}</a>
+                  {instructor?.fb ? <a href={`https://${instructor.fb}`}>{instructor.fb}</a> : '-'}
                 </td>
                 <td>
-                  <a href={instructor.instagram}>{instructor.instagram}</a>
+                  {instructor?.instagram ? (
+                    <a href={`https://${instructor.instagram}`}>{instructor.instagram}</a>
+                  ) : (
+                    '-'
+                  )}
                 </td>
                 <td>
-                  <a href={instructor.twitter}>{instructor.twitter}</a>
+                  {instructor?.twitter ? (
+                    <a href={`https://${instructor.twitter}`}>{instructor.twitter}</a>
+                  ) : (
+                    '-'
+                  )}
                 </td>
                 <td>
-                  <a href={instructor.other_social_link}>{instructor.other_social_link}</a>
+                  {instructor?.other_social_link ? (
+                    <a href={`https://${instructor.other_social_link}`}>
+                      {instructor.other_social_link}
+                    </a>
+                  ) : (
+                    '-'
+                  )}
                 </td>
               </tr>
             ))
@@ -100,6 +119,7 @@ export const AdminInstructors = () => {
                 type='text'
                 className='form-control'
                 onChange={(e) => setUser({ ...user, name: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
@@ -108,6 +128,7 @@ export const AdminInstructors = () => {
                 type='email'
                 className='form-control'
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>

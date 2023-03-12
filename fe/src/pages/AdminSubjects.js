@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal, Container, Form } from 'react-bootstrap';
+import { Button, Modal, Breadcrumb } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
 
 export const AdminSubjects = () => {
@@ -25,12 +25,14 @@ export const AdminSubjects = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await apiRequest
-      .post('/subjects', subject)
-      .then((res) => {
+    if (subject.instructor_id) {
+      await apiRequest.post('/subjects', subject).then((res) => {
         handleClose();
         fetchData();
-      })
+      });
+    } else {
+      alert('choose instructor');
+    }
   };
 
   const fetchData = async () => {
@@ -55,7 +57,11 @@ export const AdminSubjects = () => {
   }, []);
 
   return (
-    <Page>
+    <Page title='Subjects'>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Subjects</Breadcrumb.Item>
+      </Breadcrumb>
       <FontAwesomeIcon
         icon={faPlus}
         className='mr-2 btn btn-primary float-right mb-3'
@@ -116,6 +122,7 @@ export const AdminSubjects = () => {
                 className='form-control'
                 placeholder='MWF (9:00AM - 10:00AM)'
                 onChange={(e) => setSubject({ ...subject, schedule: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
@@ -124,6 +131,7 @@ export const AdminSubjects = () => {
                 className='form-control'
                 name='instructors'
                 onChange={(e) => setSubject({ ...subject, instructor_id: e.target.value })}
+                required
               >
                 <option value={null}>Choose Instructor</option>
                 {instructors.map((item, index) => (

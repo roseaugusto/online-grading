@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Breadcrumb } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
 import Select from 'react-select';
 
 export const AdminStudents = () => {
   const [students, setStudents] = useState([]);
+
   const [user, setUser] = useState({
     name: '',
     email: '',
     role: 'student',
-    course: null,
+    course: 'BSIT',
   });
 
   const [enrollment, setEnrollment] = useState({
@@ -84,7 +85,11 @@ export const AdminStudents = () => {
   }, []);
 
   return (
-    <Page>
+    <Page title='Students'>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Students</Breadcrumb.Item>
+      </Breadcrumb>
       <FontAwesomeIcon
         icon={faPlus}
         className='mr-2 btn btn-primary float-right mb-3'
@@ -115,9 +120,15 @@ export const AdminStudents = () => {
                 <td>{student.email}</td>
                 <td>{student.course}</td>
                 <td>
-                  <button className='btn btn-success' onClick={() => handleShowSubject(student.id)}>
+                  <button
+                    className='btn btn-success mr-2'
+                    onClick={() => handleShowSubject(student.id)}
+                  >
                     Enroll Student
                   </button>
+                  <a href={`tor/${student.id}`} target='_blank' rel='noreferrer'>
+                    <button className='btn btn-warning'>Generate TOR</button>
+                  </a>
                 </td>
               </tr>
             ))
@@ -136,6 +147,7 @@ export const AdminStudents = () => {
                 type='text'
                 className='form-control'
                 onChange={(e) => setUser({ ...user, name: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
@@ -144,6 +156,7 @@ export const AdminStudents = () => {
                 type='email'
                 className='form-control'
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
@@ -174,6 +187,7 @@ export const AdminStudents = () => {
                 type='text'
                 className='form-control'
                 onChange={(e) => setEnrollment({ ...enrollment, year: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
@@ -183,6 +197,7 @@ export const AdminStudents = () => {
                 className='form-control'
                 placeholder='2022-2023'
                 onChange={(e) => setEnrollment({ ...enrollment, school_year: e.target.value })}
+                required
               />
             </div>
             <div className='mb-3'>
