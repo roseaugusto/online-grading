@@ -99,6 +99,18 @@ export const Sidebar = ({ user = {} }) => {
           {user?.role === 'student' && (
             <>
               <li
+                className={
+                  loc.pathname === '/student/dashboard' ? 'rounded bg-primary' : 'bg-white'
+                }
+              >
+                <a
+                  href='/student/dashboard'
+                  className={`nav-link ${loc.pathname === '/student/dashboard' && 'text-white'}`}
+                >
+                  Dashboard
+                </a>
+              </li>
+              <li
                 className={loc.pathname === '/student/subjects' ? 'rounded bg-primary' : 'bg-white'}
               >
                 <a

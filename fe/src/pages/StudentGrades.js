@@ -41,6 +41,11 @@ export const StudentGrades = () => {
     return '-';
   };
 
+  const submitFilter = (e) => {
+    e.preventDefault();
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -51,7 +56,7 @@ export const StudentGrades = () => {
         <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Grades</Breadcrumb.Item>
       </Breadcrumb>
-      <div className='d-flex justify-content-between mb-3'>
+      <form className='d-flex justify-content-between mb-3' onSubmit={submitFilter}>
         <div className='d-flex w-100 align-items-center'>
           <input
             type='text'
@@ -71,10 +76,10 @@ export const StudentGrades = () => {
             placeholder='Filter by year'
           />
         </div>
-        <button className='btn btn-success' onClick={() => fetchData()}>
+        <button className='btn btn-success' type='submit'>
           Search
         </button>
-      </div>
+      </form>
       <table className='table table-striped'>
         <thead>
           <tr>

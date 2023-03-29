@@ -11,12 +11,14 @@ import { AdminGrades } from './pages/AdminGrades';
 import { InstructorSubjects } from './pages/InstructorSubjects';
 import { InstructorSubjectEnrollees } from './pages/InstructorSubjectEnrollees';
 import { StudentSubjects } from './pages/StudentSubjects';
+import { StudentDashboard } from './pages/StudentDashboard';
 import { StudentGrades } from './pages/StudentGrades';
 import { DownloadGrade } from './pages/DownloadGrade';
 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -39,6 +41,7 @@ root.render(
 
         <Route path='/student/subjects' element={<StudentSubjects />} />
         <Route path='/student/grades' element={<StudentGrades />} />
+        <Route path='/student/dashboard' element={<StudentDashboard />} />
       </Routes>
     </Router>
   </React.StrictMode>,

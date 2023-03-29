@@ -22,7 +22,7 @@ export const Login = () => {
         } else if (res.data.user.role === 'instructor') {
           window.location.href = '/instructor/subjects';
         } else {
-          window.location.href = '/student/subjects';
+          window.location.href = '/student/dashboard';
         }
       })
       .catch((e) => alert('Invalid credentials'));

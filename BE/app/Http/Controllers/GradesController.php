@@ -29,7 +29,7 @@ class GradesController extends Controller
           $query->where('name', 'like', '%'.$keyword.'%');
         })->orWhereHas('subject.instructor', function($query) use ($keyword) {
           $query->where('name', 'like', '%'.$keyword.'%')->where('user_id', auth()->user()->id);
-        });
+        })->orWhere('school_year', 'like', '%'.$keyword.'%');
         
       }
       return response($user_grades->get());

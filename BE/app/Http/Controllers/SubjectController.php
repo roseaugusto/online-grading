@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use App\Models\User;
+use App\Models\Grades;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,15 +18,46 @@ class SubjectController extends Controller
     public function index()
     {
       if(auth()->user()->role === 'admin') {
-        return response(Subject::with('instructor')->get());
+        $v = Subject::with('instructor')->with('students.user');
       } else if(auth()->user()->role === 'instructor') {
-        return response(Subject::with('students.user')->with('instructor')->where('instructor_id', auth()->user()->id)->get());
+        $v = Subject::with('students.user')->with('instructor')->where('instructor_id', auth()->user()->id);
       } else if(auth()->user()->role === 'student') {
         $v = Subject::with('instructor')->with('students.user')->whereHas('students', function($query) {
           $query->where('user_id', auth()->user()->id);
-        })->get();
-        return response($v);
+        });
       } 
+
+      $keyword = request()->query('keyword', '');
+
+        if($keyword) {
+          $v = $v->where('name', 'like', '%'.$keyword.'%')->get();
+        } else {
+          $v = $v->get();
+        }
+      
+     return response($v);
+    }
+
+    public function showGraph() {
+      $year = request()->query('year', '2023');
+      if(auth()->user()->role === 'admin') {
+      $grades = Subject::with('students.user')->withSum('students', 'midterm')->withSum('students', 'finals')->get();
+    } else if(auth()->user()->role === 'student') {
+      // $grades = Subject::with(['students' => function($query) {
+      //   $query->selectRaw('YEAR(created_at) as year, 
+      //   MONTH(created_at) as month, 
+      //   SUM(midterm) as midterm_total, 
+      //   SUM(finals) as finals_total');
+      // }])->whereHas('students', function($query) {
+      //   $query->where('user_id', auth()->user()->id);
+      // })->get();
+      //$grades = Grades::with('subject')->where('user_id', auth()->user()->id)->get()->groupBy('subject_id');
+      $year = $year === 'null' ? '2023': $year;
+      $grades = Subject::with('students.user')->whereHas('students', function($query) use ($year){
+        $query->where('user_id', auth()->user()->id)->whereYear('created_at', $year);
+      })->get();
+    }
+      return response($grades);
     }
 
     /**

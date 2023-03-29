@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Page } from '../pages/Page';
+import { Page } from './Page';
 import { apiRequest } from '../utils/apiRequest';
 import { Breadcrumb } from 'react-bootstrap';
 import {
@@ -12,12 +12,15 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import DatePicker from 'react-datepicker';
+import { DateTime } from 'luxon';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const AdminDashboard = () => {
+export const StudentDashboard = () => {
   const [user, setUser] = useState({});
   const [sub, setSub] = useState([]);
+  const [startDate, setStartDate] = useState(null);
 
   const options = {
     responsive: true,
@@ -27,7 +30,7 @@ export const AdminDashboard = () => {
       },
       title: {
         display: true,
-        text: 'Number of Student Grades Based on Subject',
+        text: 'My Grades Based on Subject and Year',
       },
     },
     scales: {
@@ -76,7 +79,10 @@ export const AdminDashboard = () => {
   };
 
   const fetchData = async () => {
-    await apiRequest.get(`/show-graph`).then((res) => {
+    const params = new URLSearchParams({
+      year: startDate ? DateTime.fromJSDate(startDate).year : null,
+    });
+    await apiRequest.get(`/show-graph?${params.toString()}`).then((res) => {
       setSub(res.data);
     });
   };
@@ -95,6 +101,22 @@ export const AdminDashboard = () => {
         <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
       </Breadcrumb>
+      <div className='d-flex align-items-center justify-content-start'>
+        <b>Year Picker</b>
+        <div>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            showYearPicker
+            dateFormat='yyyy'
+            className='p-1 border rounded mx-2'
+            yearItemNumber={4}
+          />
+        </div>
+        <button className='btn btn-success' onClick={() => fetchData()}>
+          Submit
+        </button>
+      </div>
       <Bar options={options} data={data} />
     </Page>
   );

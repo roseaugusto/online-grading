@@ -26,4 +26,5 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::resource('subjects', SubjectController::class);
   Route::resource('grades', GradesController::class);
   Route::get('user-tor/{id}', [GradesController::class, 'showTor']);
+  Route::get('show-graph', [SubjectController::class, 'showGraph']);
 });

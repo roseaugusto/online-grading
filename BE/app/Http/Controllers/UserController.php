@@ -89,7 +89,16 @@ class UserController extends Controller
     }
 
     public function showUsersbyRole($role) {
-      return User::where('role', $role)->get();
+      $keyword = request()->query('keyword', '');
+      $v = User::where('role', $role);
+      
+      if($keyword) {
+        $v = $v->where('name', 'like', '%'.$keyword.'%')->get();
+      } else {
+        $v = $v->get();
+      }
+
+      return response($v);
     }
 
     public function logout(Request $request) {

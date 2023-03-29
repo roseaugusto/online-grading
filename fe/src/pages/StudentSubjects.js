@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { apiRequest } from '../utils/apiRequest';
-import { OverlayTrigger, Tooltip, Breadcrumb } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Breadcrumb, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export const StudentSubjects = () => {
   const [subjects, setSubjects] = useState([]);
+  const [keyword, setKeyword] = useState('');
 
   const fetchData = async () => {
-    await apiRequest.get('/subjects').then((res) => {
+    const urlSearchParams = new URLSearchParams();
+    if (keyword !== '') {
+      urlSearchParams.append('keyword', keyword);
+    }
+    await apiRequest.get(`/subjects?${urlSearchParams.toString()}`).then((res) => {
       setSubjects(res.data || []);
     });
+  };
+
+  const submitFilter = (e) => {
+    e.preventDefault();
+    fetchData();
   };
 
   useEffect(() => {
@@ -22,6 +34,22 @@ export const StudentSubjects = () => {
         <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Subject</Breadcrumb.Item>
       </Breadcrumb>
+      <div className='d-flex justify-content-between align-items-center'>
+        <form className='d-flex w-100' onSubmit={submitFilter}>
+          <input
+            type='text'
+            className='form-control mr-3'
+            placeholder='Type keyword'
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+          />
+          <Button variant='primary' type='submit'>
+            <FontAwesomeIcon icon={faSearch} />
+          </Button>
+        </form>
+      </div>
+      <br />
       <table className='table table-striped'>
         <thead>
           <tr>

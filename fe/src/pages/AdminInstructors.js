@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Button, Modal } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
 import { Breadcrumb } from 'react-bootstrap';
@@ -18,14 +18,24 @@ export const AdminInstructors = () => {
     other_social_link: '',
   });
   const [showModal, setShowModal] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
   const fetchData = async () => {
-    await apiRequest.get('/users/instructor').then((res) => {
+    const urlSearchParams = new URLSearchParams();
+    if (keyword !== '') {
+      urlSearchParams.append('keyword', keyword);
+    }
+    await apiRequest.get(`/users/instructor?${urlSearchParams.toString()}`).then((res) => {
       setInstructors(res.data || []);
     });
+  };
+
+  const submitFilter = (e) => {
+    e.preventDefault();
+    fetchData();
   };
 
   useEffect(() => {
@@ -46,13 +56,32 @@ export const AdminInstructors = () => {
         <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Instructors</Breadcrumb.Item>
       </Breadcrumb>
-      <FontAwesomeIcon
-        icon={faPlus}
-        className='mr-2 btn btn-primary float-right mb-3'
-        onClick={() => {
-          handleShow();
-        }}
-      />
+      <div className='d-flex justify-content-between align-items-center'>
+        <form className='d-flex w-75' onSubmit={submitFilter}>
+          <input
+            type='text'
+            className='form-control mr-3'
+            placeholder='Type keyword'
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+          />
+          <Button variant='primary' type='submit'>
+            <FontAwesomeIcon icon={faSearch} />
+          </Button>
+        </form>
+        <div className='w-25 text-right'>
+          {' '}
+          <FontAwesomeIcon
+            icon={faPlus}
+            className='btn btn-primary'
+            onClick={() => {
+              handleShow();
+            }}
+          />
+        </div>
+      </div>
+      <br />
       <table className='table table-striped'>
         <thead>
           <tr>
