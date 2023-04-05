@@ -34,7 +34,7 @@ root.render(
         <Route path='/admin/students' element={<AdminStudents />} />
         <Route path='/admin/subjects' element={<AdminSubjects />} />
         <Route path='/admin/grades' element={<AdminGrades />} />
-        <Route path='/admin/tor/:id' element={<DownloadGrade />} />
+        <Route path='/user/tor/:id' element={<DownloadGrade />} />
         <Route path='/user/profile' element={<Profile />} />
 
         <Route path='/instructor/subjects' element={<InstructorSubjects />} />

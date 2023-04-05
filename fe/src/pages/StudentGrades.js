@@ -6,6 +6,7 @@ import { Breadcrumb } from 'react-bootstrap';
 
 export const StudentGrades = () => {
   const [grades, setGrades] = useState([]);
+  const [user, setUser] = useState({});
   const [keyword, setKeyword] = useState(null);
 
   const optionsYear = [
@@ -30,6 +31,10 @@ export const StudentGrades = () => {
     });
   };
 
+  const fetchUserData = async () => {
+    setUser(JSON.parse(localStorage.getItem('user') || {}));
+  };
+
   const gradeFormat = (grade) => {
     if (grade) {
       if (grade <= 0) {
@@ -48,6 +53,7 @@ export const StudentGrades = () => {
 
   useEffect(() => {
     fetchData();
+    fetchUserData();
   }, []);
 
   return (
@@ -76,9 +82,17 @@ export const StudentGrades = () => {
             placeholder='Filter by year'
           />
         </div>
-        <button className='btn btn-success' type='submit'>
-          Search
-        </button>
+        <div className='d-flex w-100'>
+          {' '}
+          <button className='btn btn-success mr-2' type='submit'>
+            Search
+          </button>
+          <a href={`/user/tor/${user.id}`} target='_blank' rel='noreferrer'>
+            <button className='btn btn-warning' type='button'>
+              Generate TOR
+            </button>
+          </a>
+        </div>
       </form>
       <table className='table table-striped'>
         <thead>

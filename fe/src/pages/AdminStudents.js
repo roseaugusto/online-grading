@@ -165,7 +165,7 @@ export const AdminStudents = () => {
                   >
                     Enroll Student
                   </button>
-                  <a href={`tor/${student.id}`} target='_blank' rel='noreferrer'>
+                  <a href={`/user/tor/${student.id}`} target='_blank' rel='noreferrer'>
                     <button className='btn btn-warning'>Generate TOR</button>
                   </a>
                 </td>
