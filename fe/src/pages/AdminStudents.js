@@ -50,6 +50,15 @@ export const AdminStudents = () => {
 
   const onEnrollmentSubmit = async (e) => {
     e.preventDefault();
+    const hasData = await apiRequest.get(
+      `user/enrollment?user_id=${enrollment.user_id}&school_year=${enrollment.school_year}&subject_id=${enrollment.subject_id}`,
+    );
+
+    if (hasData.data) {
+      alert('Cannot re-enroll the subject in the same school year');
+      return;
+    }
+
     await apiRequest.post('/grades', enrollment).then((res) => {
       handleCloseSubject();
       fetchData();

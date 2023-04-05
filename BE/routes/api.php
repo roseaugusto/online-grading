@@ -23,8 +23,12 @@ Route::post('forgot-password/', [UserController::class, 'forgotPassword']);
 Route::middleware('auth:sanctum')->group(function() {
   Route::post('logout/', [UserController::class, 'logout']);
   Route::get('users/{role}', [UserController::class, 'showUsersbyRole']);
+  Route::get('user/profile', [UserController::class, 'showUser']);
+  Route::patch('user/', [UserController::class, 'updateUser']);
   Route::resource('subjects', SubjectController::class);
   Route::resource('grades', GradesController::class);
   Route::get('user-tor/{id}', [GradesController::class, 'showTor']);
+  Route::get('user/enrollment', [GradesController::class, 'showDuplicateEnrollment']);
   Route::get('show-graph', [SubjectController::class, 'showGraph']);
+  Route::get('show-details', [SubjectController::class, 'showDetails']);
 });

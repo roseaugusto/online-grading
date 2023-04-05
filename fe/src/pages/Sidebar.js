@@ -132,6 +132,14 @@ export const Sidebar = ({ user = {} }) => {
               </li>
             </>
           )}
+          <li className={loc.pathname === '/user/profile' ? 'rounded bg-primary' : 'bg-white'}>
+            <a
+              href='/user/profile'
+              className={`nav-link ${loc.pathname === '/user/profile' && 'text-white'}`}
+            >
+              Profile
+            </a>
+          </li>
         </ul>
         <div
           className='d-flex align-items-center p-3 position-absolute bg-primary text-white'

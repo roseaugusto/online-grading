@@ -8,6 +8,7 @@ import { AdminInstructors } from './pages/AdminInstructors';
 import { AdminStudents } from './pages/AdminStudents';
 import { AdminSubjects } from './pages/AdminSubjects';
 import { AdminGrades } from './pages/AdminGrades';
+import { Profile } from './pages/Profile';
 import { InstructorSubjects } from './pages/InstructorSubjects';
 import { InstructorSubjectEnrollees } from './pages/InstructorSubjectEnrollees';
 import { StudentSubjects } from './pages/StudentSubjects';
@@ -34,6 +35,7 @@ root.render(
         <Route path='/admin/subjects' element={<AdminSubjects />} />
         <Route path='/admin/grades' element={<AdminGrades />} />
         <Route path='/admin/tor/:id' element={<DownloadGrade />} />
+        <Route path='/user/profile' element={<Profile />} />
 
         <Route path='/instructor/subjects' element={<InstructorSubjects />} />
 

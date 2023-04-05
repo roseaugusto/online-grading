@@ -5,6 +5,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { Breadcrumb } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export const InstructorSubjectEnrollees = () => {
   const { id } = useParams();
@@ -17,6 +19,7 @@ export const InstructorSubjectEnrollees = () => {
     type: 'midterm',
     grade: null,
   });
+  const [keyword, setKeyword] = useState('');
 
   const handleClose = () => setShowModal(false);
   const handleShow = (id) => {
@@ -24,8 +27,18 @@ export const InstructorSubjectEnrollees = () => {
     setShowModal(true);
   };
 
+  const submitFilter = (e) => {
+    e.preventDefault();
+    fetchData();
+  };
+
   const fetchData = async () => {
-    await apiRequest.get(`/subjects/${id}`).then((res) => {
+    const urlSearchParams = new URLSearchParams();
+    if (keyword !== '') {
+      urlSearchParams.append('keyword', keyword);
+    }
+
+    await apiRequest.get(`/subjects/${id}?${urlSearchParams.toString()}`).then((res) => {
       setSub(res.data[0] || {});
       setStudents(res.data[0].students || []);
     });
@@ -84,6 +97,22 @@ export const InstructorSubjectEnrollees = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Enrollees</Breadcrumb.Item>
       </Breadcrumb>
+      <div className='d-flex justify-content-between align-items-center'>
+        <form className='d-flex w-100' onSubmit={submitFilter}>
+          <input
+            type='text'
+            className='form-control mr-3'
+            placeholder='Type keyword'
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+          />
+          <Button variant='primary' type='submit'>
+            <FontAwesomeIcon icon={faSearch} />
+          </Button>
+        </form>
+      </div>
+      <br />
       <table className='table table-striped'>
         <thead>
           <tr>

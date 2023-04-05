@@ -29,18 +29,18 @@ export const Login = () => {
   };
 
   return (
-    <div className='min-vh-100 d-flex justify-content-center py-5 bg-primary'>
-      <div className='card w-25 border-0'>
+    <div
+      className='min-vh-100 d-flex justify-content-center py-5'
+      style={{ backgroundImage: `url('/bg.png')`, backgroundSize: 'cover' }}
+    >
+      <div className='card w-25 border-0 shadow' style={{ backgroundColor: '#e9f2f9' }}>
         <div className='card-header p-0'>
-          <img
-            src='https://www.studysphere.com.au/wp-content/uploads/2017/04/school-79-1024x805.jpg'
-            className='card-img-top'
-            alt=''
-          />
+          <img src='/login.jpeg' className='card-img-top' alt='' />
         </div>
         <div className='card-body'>
           <form onSubmit={onSubmit}>
-            <h5 className='card-title text-center my-2'>Login</h5>
+            <h4 className='card-title text-center my-2'>Buenavista Community College</h4>
+            <h5 className='card-title text-center my-2'>Online Grading System Login</h5>
             <div className='mb-3'>
               <h6>Email</h6>
               <input

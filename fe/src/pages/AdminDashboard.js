@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from '../pages/Page';
+import './css/page.css';
 import { apiRequest } from '../utils/apiRequest';
 import { Breadcrumb } from 'react-bootstrap';
 import {
@@ -12,12 +13,20 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faUserGraduate,
+  faChalkboardTeacher,
+  faFileClipboard,
+  faBook,
+} from '@fortawesome/free-solid-svg-icons';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const AdminDashboard = () => {
   const [user, setUser] = useState({});
   const [sub, setSub] = useState([]);
+  const [det, setDet] = useState([]);
 
   const options = {
     responsive: true,
@@ -65,7 +74,7 @@ export const AdminDashboard = () => {
       {
         label: 'Midterms',
         data: getData(),
-        backgroundColor: '#f74358',
+        backgroundColor: '#ef5350',
       },
       {
         label: 'Finals',
@@ -78,6 +87,10 @@ export const AdminDashboard = () => {
   const fetchData = async () => {
     await apiRequest.get(`/show-graph`).then((res) => {
       setSub(res.data);
+    });
+
+    await apiRequest.get(`/show-details`).then((res) => {
+      setDet(res.data);
     });
   };
 
@@ -95,6 +108,42 @@ export const AdminDashboard = () => {
         <Breadcrumb.Item href='/admin/dashboard'>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
       </Breadcrumb>
+      <div className='container mb-5'>
+        <div className='row'>
+          <div className='col-md-3'>
+            <div className='card-counter primary'>
+              <FontAwesomeIcon icon={faBook} size='4x' />
+              <span className='count-numbers'>{det?.subjects}</span>
+              <span className='count-name'>Subjects</span>
+            </div>
+          </div>
+
+          <div className='col-md-3'>
+            <div className='card-counter danger'>
+              <FontAwesomeIcon icon={faFileClipboard} size='4x' />
+              <span className='count-numbers'>{det?.class}</span>
+              <span className='count-name'>Total Classes</span>
+            </div>
+          </div>
+
+          <div className='col-md-3'>
+            <div className='card-counter success'>
+              <FontAwesomeIcon icon={faChalkboardTeacher} size='4x' />
+              <span className='count-numbers'>{det?.instructors}</span>
+              <span className='count-name'>Instructors</span>
+            </div>
+          </div>
+
+          <div className='col-md-3'>
+            <div className='card-counter info'>
+              <FontAwesomeIcon icon={faUserGraduate} size='4x' />
+              <span className='count-numbers'>{det?.students}</span>
+              <span className='count-name'>Students</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
       <Bar options={options} data={data} />
     </Page>
   );

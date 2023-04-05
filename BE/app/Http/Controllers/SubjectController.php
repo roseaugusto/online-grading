@@ -51,13 +51,27 @@ class SubjectController extends Controller
       // }])->whereHas('students', function($query) {
       //   $query->where('user_id', auth()->user()->id);
       // })->get();
-      //$grades = Grades::with('subject')->where('user_id', auth()->user()->id)->get()->groupBy('subject_id');
-      $year = $year === 'null' ? '2023': $year;
-      $grades = Subject::with('students.user')->whereHas('students', function($query) use ($year){
-        $query->where('user_id', auth()->user()->id)->whereYear('created_at', $year);
-      })->get();
+      $grades = Grades::with('subject')->where('user_id', auth()->user()->id)->get()->groupBy('subject.name');
+      // $year = $year === 'null' ? '2023': $year;
+      // $grades = Subject::with('students.user')->whereHas('students', function($query) use ($year){
+      //   $query->where('user_id', auth()->user()->id);
+      // })->get();
+      //->whereYear('created_at', $year)
     }
       return response($grades);
+    }
+
+    public function showDetails() {
+      $instructors = User::where('role', 'instructor')->count();
+      $students = User::where('role', 'student')->count();
+      $subjects = Subject::count();
+      $class = Grades::with('subject')->get()->groupBy('school_year');
+      $count = 0;
+      foreach($class as $c) {
+
+        $count += count(collect($c)->unique('subject_id'));
+      }
+      return response(['instructors' => $instructors, 'students' => $students, 'subjects'=>$subjects, 'class'=>$count]);
     }
 
     /**
@@ -100,8 +114,17 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-      $user_grades = Subject::with('students.user')->where('id', $id)->get();
-      return response($user_grades, 201);
+      $v = Subject::with('students.user')->where('id', $id);
+      $keyword = request()->query('keyword', '');
+
+      if($keyword) {
+        $v = Subject::with(['students', function($query) use ($keyword) {
+          $query->with('user')->where('name', 'like', '%'.$keyword.'%');
+        }])->where('id', $id)->get();
+      } else {
+        $v = $v->get();
+      }
+      return response($v, 200);
     }
 
     /**

@@ -51,11 +51,11 @@ export const StudentDashboard = () => {
     },
   };
 
-  const labels = sub.map((item) => item.name);
+  const labels = Object.keys(sub);
 
   const getData = (type = 'midterms') => {
-    const midtermData = sub.map((item) => item.students_sum_midterm);
-    const finalsData = sub.map((item) => item.students_sum_finals);
+    const midtermData = Object.keys(sub).map((item) => sub[item].map((key) => key.midterm));
+    const finalsData = Object.keys(sub).map((item) => sub[item].map((key) => key.finals));
     if (type === 'finals') {
       return finalsData;
     }
@@ -68,7 +68,7 @@ export const StudentDashboard = () => {
       {
         label: 'Midterms',
         data: getData(),
-        backgroundColor: '#f74358',
+        backgroundColor: '#ef5350',
       },
       {
         label: 'Finals',

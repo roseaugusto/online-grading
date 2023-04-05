@@ -27,6 +27,10 @@ class User extends Authenticatable
         'twitter',
         'other_social_link',
         'course',
+        'contact',
+        'address',
+        'birthdate',
+
     ];
 
     /**

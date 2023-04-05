@@ -88,6 +88,12 @@ class GradesController extends Controller
       response([$user_grades], 201);
     }
 
+    public function showDuplicateEnrollment(Request $request)
+    {
+      $has = Grades::where('user_id',  request()->query('user_id'))->where('school_year', request()->input('school_year'))->where('subject_id', request()->input('subject_id'))->first();
+      return response($has, 201);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

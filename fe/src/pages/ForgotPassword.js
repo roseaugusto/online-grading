@@ -23,17 +23,18 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <div className='min-vh-100 d-flex justify-content-center py-5 bg-primary'>
-      <div className='card w-25 border-0'>
+    <div
+      className='min-vh-100 d-flex justify-content-center py-5'
+      style={{ backgroundImage: `url('/bg.png')`, backgroundSize: 'cover' }}
+    >
+      <div className='card w-25 border-0 shadow' style={{ backgroundColor: '#e9f2f9' }}>
         <div className='card-header p-0'>
-          <img
-            src='https://static.vecteezy.com/system/resources/previews/002/098/231/original/man-forgot-password-to-login-concept-illustration-vector.jpg'
-            className='card-img-top'
-            alt=''
-          />
+          <img src='/forgot.webp' className='card-img-top' alt='' />
         </div>
         <div className='card-body'>
           <form onSubmit={onSubmit}>
+            <h4 className='card-title text-center my-2'>Buenavista Community College</h4>
+            <h5 className='card-title text-center my-2'>Online Grading System</h5>
             <h5 className='card-title text-center my-2'>Forgot Password</h5>
             <div className='mb-3'>
               <h6>Email</h6>
