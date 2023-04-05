@@ -51,12 +51,13 @@ class SubjectController extends Controller
       // }])->whereHas('students', function($query) {
       //   $query->where('user_id', auth()->user()->id);
       // })->get();
-      $grades = Grades::with('subject')->where('user_id', auth()->user()->id)->get()->groupBy('subject.name');
+      $grades = Grades::with('subject')->where('user_id', auth()->user()->id)->whereYear('created_at', '=', $year)->get()->groupBy('subject.name');
       // $year = $year === 'null' ? '2023': $year;
       // $grades = Subject::with('students.user')->whereHas('students', function($query) use ($year){
       //   $query->where('user_id', auth()->user()->id);
       // })->get();
       //->whereYear('created_at', $year)
+
     }
       return response($grades);
     }

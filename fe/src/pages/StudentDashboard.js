@@ -20,7 +20,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 export const StudentDashboard = () => {
   const [user, setUser] = useState({});
   const [sub, setSub] = useState([]);
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
 
   const options = {
     responsive: true,
