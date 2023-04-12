@@ -41,6 +41,9 @@ export const AdminStudents = () => {
     { value: 'BSIT', label: 'BSIT' },
     { value: 'BSCRIM', label: 'BSCRIM' },
     { value: 'BSHRM', label: 'BSHRM' },
+    { value: 'BEED', label: 'BEED' },
+    { value: 'BSED-ENGLISH', label: 'BSED-ENGLISH' },
+    { value: 'BSED-MATH', label: 'BSED-MATH' },
   ];
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (option) => {
