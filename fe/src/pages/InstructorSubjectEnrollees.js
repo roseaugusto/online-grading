@@ -54,10 +54,15 @@ export const InstructorSubjectEnrollees = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await apiRequest.patch(`/grades/${grade.id}`, grade).then((res) => {
-      handleClose();
-      fetchData();
-    });
+    await apiRequest
+      .patch(`/grades/${grade.id}`, grade)
+      .then((res) => {
+        handleClose();
+        fetchData();
+      })
+      .catch((e) => {
+        alert(e.response.data);
+      });
   };
 
   const options = [

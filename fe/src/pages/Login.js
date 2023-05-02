@@ -63,6 +63,8 @@ export const Login = () => {
               </button>
               <br />
               <a href='/forgot-password'>Forgot Password?</a>
+              <br />
+              <a href='/private-policy'>Private Policy</a>
             </div>
           </form>
         </div>

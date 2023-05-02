@@ -97,6 +97,7 @@ export const DownloadGrade = () => {
               <th>Term</th>
               <th>School Year</th>
               <th>Subject Title</th>
+              <th>LRN</th>
               <th>Grades</th>
             </tr>
           </thead>
@@ -109,12 +110,17 @@ export const DownloadGrade = () => {
                       <th />
                       <th />
                       <th />
+                      <th />
                     </tr>
                     {grade[key].map((g, idx) => (
                       <tr key={idx}>
                         <td />
                         <td>{g.school_year}</td>
                         <td>{g.subject.name}</td>
+                        <td>
+                          {user.id}
+                          {DateTime.fromISO(g.created_at).toFormat('yyyy')}0000{g.id}
+                        </td>
                         <td>{g.finals ? parseFloat(g.finals).toFixed(1) : `-`}</td>
                       </tr>
                     ))}

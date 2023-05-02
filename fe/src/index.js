@@ -15,6 +15,7 @@ import { StudentSubjects } from './pages/StudentSubjects';
 import { StudentDashboard } from './pages/StudentDashboard';
 import { StudentGrades } from './pages/StudentGrades';
 import { DownloadGrade } from './pages/DownloadGrade';
+import { PrivatePolicy } from './pages/PrivatePolicy';
 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -26,8 +27,8 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path='/' element={<Page />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/' element={<Login />} />
+        <Route path='/private-policy' element={<PrivatePolicy />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path='/admin/intructors' element={<AdminInstructors />} />
