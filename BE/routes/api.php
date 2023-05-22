@@ -31,4 +31,5 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('user/enrollment', [GradesController::class, 'showDuplicateEnrollment']);
   Route::get('show-graph', [SubjectController::class, 'showGraph']);
   Route::get('show-details', [SubjectController::class, 'showDetails']);
+  Route::post('bulk-registration', [UserController::class, 'bulkStudentRegistration']);
 });

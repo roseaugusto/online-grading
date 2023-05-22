@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from './Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSearch, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { Button, Modal, Breadcrumb } from 'react-bootstrap';
 import { apiRequest } from '../utils/apiRequest';
+import { Excel } from '../utils/excel';
 import Select from 'react-select';
 
 export const AdminStudents = () => {
@@ -25,11 +26,17 @@ export const AdminStudents = () => {
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [showFileModal, setShowFileModal] = useState(false);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [subjects, setSubjects] = useState([]);
 
+  const [file, setFile] = useState(null);
+
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  const handleFileClose = () => setShowFileModal(false);
+  const handleFileShow = () => setShowFileModal(true);
 
   const handleCloseSubject = () => setShowSubjectModal(false);
   const handleShowSubject = (id) => {
@@ -64,6 +71,52 @@ export const AdminStudents = () => {
 
     await apiRequest.post('/grades', enrollment).then((res) => {
       handleCloseSubject();
+      fetchData();
+    });
+  };
+
+  const onFileSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      alert('Upload an excel (.xlsx) file first.');
+      return;
+    }
+
+    // reading the file
+    const book = await Excel.read(file);
+    // reading sheet
+    const coverSheet = book.Sheets['students'];
+    // set starting index
+    const firstIndex = 2;
+
+    const lastIndex = Excel.getLastIndex(coverSheet);
+
+    let rowData = [];
+    for (let i = firstIndex; i <= lastIndex; i++) {
+      let raw = {
+        name: coverSheet[`B${i}`].v,
+        email: coverSheet[`C${i}`].v,
+        role: 'student',
+        course: coverSheet[`P${i}`].v,
+        contact: coverSheet[`E${i}`].v,
+        address: coverSheet[`F${i}`].v,
+        id_number: coverSheet[`A${i}`].v,
+        gender: coverSheet[`H${i}`].v,
+        civil_status: coverSheet[`I${i}`].v,
+        religion: coverSheet[`J${i}`].v,
+        nationality: coverSheet[`K${i}`].v,
+        father_occupation: coverSheet[`L${i}`].v,
+        mother_occupation: coverSheet[`M${i}`].v,
+        guardian: coverSheet[`N${i}`].v,
+        guardian_contact: coverSheet[`O${i}`].v,
+      };
+
+      rowData.push(raw);
+    }
+
+    await apiRequest.post('/bulk-registration', { users: rowData }).then((res) => {
+      handleFileClose();
       fetchData();
     });
   };
@@ -128,12 +181,18 @@ export const AdminStudents = () => {
           </Button>
         </form>
         <div className='w-25 text-right'>
-          {' '}
           <FontAwesomeIcon
             icon={faPlus}
-            className='btn btn-primary'
+            className='btn btn-primary mr-2'
             onClick={() => {
               handleShow();
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faFileImport}
+            className='btn btn-primary'
+            onClick={() => {
+              handleFileShow();
             }}
           />
         </div>
@@ -256,6 +315,32 @@ export const AdminStudents = () => {
                   </option>
                 ))}
               </select>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={handleCloseSubject}>
+              Close
+            </Button>
+            <Button variant='primary' type='submit'>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+      <Modal show={showFileModal} onHide={handleFileClose}>
+        <form onSubmit={onFileSubmit}>
+          <Modal.Header className='bg-primary text-white'>
+            <Modal.Title>Bulk Student Registration</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className='mb-3'>
+              <h6>Upload File</h6>
+              <input
+                type='file'
+                className='form-control'
+                onChange={(e) => setFile(e.target.files[0])}
+                required
+              />
             </div>
           </Modal.Body>
           <Modal.Footer>

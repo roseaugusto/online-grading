@@ -30,6 +30,15 @@ class User extends Authenticatable
         'contact',
         'address',
         'birthdate',
+        'id_number',
+        'gender',
+        'civil_status',
+        'religion',
+        'nationality',
+        'father_occupation',
+        'mother_occupation',
+        'guardian',
+        'guardian_contact',
 
     ];
 

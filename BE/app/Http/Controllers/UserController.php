@@ -30,6 +30,15 @@ class UserController extends Controller
         'contact' => $request->input('contact'),
         'address' => $request->input('address'),
         'birthdate' => $request->input('birthdate'),
+        'id_number' => $request->input('id_number'),
+        'gender' => $request->input('gender'),
+        'civil_status' => $request->input('civil_status'),
+        'religion' => $request->input('religion'),
+        'nationality' => $request->input('nationality'),
+        'father_occupation' => $request->input('father_occupation'),
+        'mother_occupation' => $request->input('mother_occupation'),
+        'guardian' => $request->input('guardian'),
+        'guardian_contact' => $request->input('guardian_contact'),
       ]);
 
       $token = $user->createToken('uniquetoken')->plainTextToken;
@@ -40,6 +49,24 @@ class UserController extends Controller
       ];
 
       return response($response, 201);
+    }
+
+    public function bulkStudentRegistration(Request $request) {
+
+      // Retrieve the data from the HTTP POST request
+      $usersData = $request->input('users');
+
+      // Hash the passwords in the users data
+      foreach ($usersData as &$userData) {
+          $userData['password'] = bcrypt('1234');
+      }
+
+      // Perform bulk registration using the User model and the insert() method
+      User::insert($usersData);
+
+      // Return a response indicating success or perform any other necessary actions
+      return response()->json(['message' => 'Bulk registration successful']);
+
     }
 
     public function login(Request $request) {
@@ -112,6 +139,15 @@ class UserController extends Controller
         $user->contact = $request->input('contact');
         $user->address = $request->input('address');
         $user->birthdate = $request->input('birthdate');
+        $user->id_number = $request->input('id_number');
+        $user->gender = $request->input('gender');
+        $user->civil_status = $request->input('civil_status');
+        $user->religion = $request->input('religion');
+        $user->nationality = $request->input('nationality');
+        $user->father_occupation = $request->input('father_occupation');
+        $user->mother_occupation = $request->input('mother_occupation');
+        $user->guardian = $request->input('guardian');
+        $user->guardian_contact = $request->input('guardian_contact');
         $user->save();
         
           return response([
