@@ -41,10 +41,10 @@ class SubjectController extends Controller
     public function showGraph() {
       $year = request()->query('year', '2023');
       if(auth()->user()->role === 'admin') {
-      $grades = Subject::with('students.user')->withSum('students', 'midterm')->withSum('students', 'finals')->get();
+      $grades = Subject::with('students.user')->withSum('students', 'prelim')->withSum('students', 'midterm')->withSum('students', 'semi_finals')->withSum('students', 'finals')->get();
     } else if(auth()->user()->role === 'student') {
       // $grades = Subject::with(['students' => function($query) {
-      //   $query->selectRaw('YEAR(created_at) as year, 
+      //   $query->selectRaw('YEAR(created_at) as year,
       //   MONTH(created_at) as month, 
       //   SUM(midterm) as midterm_total, 
       //   SUM(finals) as finals_total');

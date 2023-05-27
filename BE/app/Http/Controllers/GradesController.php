@@ -124,8 +124,12 @@ class GradesController extends Controller
         return response('Cannot submit grade. Has already existing midterm grade', 400);
       } else if ($fields['type'] === 'finals' && $grade->finals) {
         return response('Cannot submit grade. Has already existing final grade', 400);
+      }else if ($fields['type'] === 'prelim' && $grade->prelim) {
+        return response('Cannot submit grade. Has already existing prelim grade', 400);
+      }else if ($fields['type'] === 'semi_finals' && $grade->semi_finals) {
+        return response('Cannot submit grade. Has already existing semi-final grade', 400);
       } else {
-        $fields['type'] === 'midterm' ? ($grade->midterm = $fields['grade']) : ($grade->finals = $fields['grade']);
+        $grade[$fields['type']] = $fields['grade'];
       $grade->save();
       }
       

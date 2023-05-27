@@ -9,7 +9,7 @@ class Grades extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'subject_id', 'midterm', 'finals', 'year', 'school_year'];
+    protected $fillable = ['user_id', 'subject_id', 'midterm', 'finals', 'year', 'school_year', 'prelim', 'semi_finals'];
 
     public function user(){
       return $this->belongsTo(User::class, 'user_id');

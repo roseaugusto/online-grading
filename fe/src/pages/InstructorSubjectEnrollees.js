@@ -59,6 +59,11 @@ export const InstructorSubjectEnrollees = () => {
       .then((res) => {
         handleClose();
         fetchData();
+        setGrade({
+          id: null,
+          type: 'midterm',
+          grade: null,
+        });
       })
       .catch((e) => {
         alert(e.response.data);
@@ -66,8 +71,10 @@ export const InstructorSubjectEnrollees = () => {
   };
 
   const options = [
+    { value: 'prelim', label: 'prelim' },
     { value: 'midterm', label: 'midterm' },
-    { value: 'final', label: 'final' },
+    { value: 'semi_finals', label: 'semi-finals' },
+    { value: 'finals', label: 'final' },
   ];
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (option) => {
@@ -123,7 +130,9 @@ export const InstructorSubjectEnrollees = () => {
           <tr>
             <th scope='col'>ID</th>
             <th scope='col'>Student</th>
+            <th scope='col'>Prelims</th>
             <th scope='col'>Midterms</th>
+            <th scope='col'>Semi-Finals</th>
             <th scope='col'>Finals</th>
             {user.role === 'instructor' ? <th scope='col'>Actions</th> : null}
           </tr>
@@ -138,7 +147,9 @@ export const InstructorSubjectEnrollees = () => {
               <tr key={index}>
                 <th scope='row'>{key.user.id}</th>
                 <td>{key.user.name}</td>
+                <td>{gradeFormat(key.prelim)}</td>
                 <td>{gradeFormat(key.midterm)}</td>
+                <td>{gradeFormat(key.semi_finals)}</td>
                 <td>{gradeFormat(key.finals)}</td>
                 {user.role === 'instructor' ? (
                   <td>

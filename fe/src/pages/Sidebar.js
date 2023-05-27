@@ -10,7 +10,7 @@ export const Sidebar = ({ user = {} }) => {
     await apiRequest.post('logout', {}).then(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.href = '/';
     });
   };
   return (

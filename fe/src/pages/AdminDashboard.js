@@ -60,10 +60,16 @@ export const AdminDashboard = () => {
   const labels = sub.map((item) => item.name);
 
   const getData = (type = 'midterms') => {
+    const prelimData = sub.map((item) => item.students_sum_prelim);
     const midtermData = sub.map((item) => item.students_sum_midterm);
+    const semiFinalsData = sub.map((item) => item.students_sum_semi_finals);
     const finalsData = sub.map((item) => item.students_sum_finals);
     if (type === 'finals') {
       return finalsData;
+    } else if (type === 'prelim') {
+      return prelimData;
+    } else if (type === 'semi_finals') {
+      return semiFinalsData;
     }
     return midtermData;
   };
@@ -72,9 +78,19 @@ export const AdminDashboard = () => {
     labels,
     datasets: [
       {
+        label: 'Prelims',
+        data: getData('prelim'),
+        backgroundColor: '#0FC533',
+      },
+      {
         label: 'Midterms',
         data: getData(),
         backgroundColor: '#ef5350',
+      },
+      {
+        label: 'Semi-Finals',
+        data: getData('semi_finals'),
+        backgroundColor: '#806188',
       },
       {
         label: 'Finals',

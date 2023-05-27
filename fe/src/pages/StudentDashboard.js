@@ -54,10 +54,16 @@ export const StudentDashboard = () => {
   const labels = Object.keys(sub);
 
   const getData = (type = 'midterms') => {
+    const prelimData = Object.keys(sub).map((item) => sub[item].map((key) => key.prelim));
     const midtermData = Object.keys(sub).map((item) => sub[item].map((key) => key.midterm));
+    const semiFinalsData = Object.keys(sub).map((item) => sub[item].map((key) => key.semi_finals));
     const finalsData = Object.keys(sub).map((item) => sub[item].map((key) => key.finals));
     if (type === 'finals') {
       return finalsData;
+    } else if (type === 'prelim') {
+      return prelimData;
+    } else if (type === 'semi_finals') {
+      return semiFinalsData;
     }
     return midtermData;
   };
@@ -66,9 +72,19 @@ export const StudentDashboard = () => {
     labels,
     datasets: [
       {
+        label: 'Prelims',
+        data: getData('prelim'),
+        backgroundColor: '#0FC533',
+      },
+      {
         label: 'Midterms',
         data: getData(),
         backgroundColor: '#ef5350',
+      },
+      {
+        label: 'Semi-Finals',
+        data: getData('semi_finals'),
+        backgroundColor: '#806188',
       },
       {
         label: 'Finals',
