@@ -344,7 +344,7 @@ export const AdminStudents = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant='secondary' onClick={handleCloseSubject}>
+            <Button variant='secondary' onClick={handleFileClose}>
               Close
             </Button>
             <Button variant='primary' type='submit'>
