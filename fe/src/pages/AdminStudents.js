@@ -115,10 +115,15 @@ export const AdminStudents = () => {
       rowData.push(raw);
     }
 
-    await apiRequest.post('/bulk-registration', { users: rowData }).then((res) => {
-      handleFileClose();
-      fetchData();
-    });
+    await apiRequest
+      .post('/bulk-registration', { users: rowData })
+      .then((res) => {
+        handleFileClose();
+        fetchData();
+      })
+      .catch((err) => {
+        alert('Cannot proceed. Please check for duplicate student');
+      });
   };
 
   const onSubmit = async (e) => {
